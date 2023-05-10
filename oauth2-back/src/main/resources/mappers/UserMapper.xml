@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.oauth2.repository.UserRepository">
+
+	<resultMap type="com.study.oauth2.entity.User" id="userMap">
+		<id property="userId" column="user_id" />
+		<result property="email" column="email" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="provider" column="provider" />
+		<collection property="authorities" javaType="list" resultMap="authorityMap" />
+	</resultMap>
+	
+	<resultMap type="com.study.oauth2.entity.Authority" id="authorityMap">
+		<id property="authorityId" column="authority_id" />
+		<result property="userId" column="user_id" />
+		<result property="roleId" column="role_id" />
+		<association property="role" resultMap="roleMap" />
+	</resultMap>
+	
+	<resultMap type="com.study.oauth2.entity.Role" id="roleMap">
+		<id property="roleId" column="role_id" />
+		<result property="roleName" column="role_name" />
+	</resultMap>
+
+	<select id="findUserByEmail" resultMap="userMap">
+		select
+			ut.user_id,
+			ut.email,
+			ut.password,
+			ut.name,
+			ut.provider,
+			
+			at.authority_id,
+			at.user_id,
+			at.role_id,
+			
+			rt.role_id,
+			rt.role_name
+		from
+			user_tb ut
+			left outer join authority_tb at on(at.user_id = ut.user_id)
+			left outer join role_tb rt on(rt.role_id = at.role_id)
+		where
+			ut.email = #{email}
+	</select>
+	
+	<insert id="saveUser" 
+	parameterType="com.study.oauth2.entity.User"
+	useGeneratedKeys="true"
+	keyProperty="userId">
+		insert into user_tb
+		values (0, #{email}, #{password}, #{name}, #{provider})
+	</insert>
+	
+	<insert id="saveAuthority" parameterType="com.study.oauth2.entity.Authority">
+		insert into authority_tb
+		values (0, #{userId}, #{roleId})
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
