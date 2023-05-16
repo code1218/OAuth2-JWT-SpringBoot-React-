@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.oauth2.repository.PostsRepository">
+
+	<insert id="registerPosts" parameterType="com.study.oauth2.entity.Posts"
+		useGeneratedKeys="true" keyProperty="postsId">
+		insert into posts_tb
+		values (0, #{userId}, #{title}, #{content})
+	</insert>
+	
+	<insert id="registerPostsImgs" parameterType="list">
+		insert into posts_img
+		values
+		<foreach collection="list" item="postsImg" separator=",">
+			(0, #{postsImg.postsId}, #{postsImg.originName}, #{postsImg.tempName}, #{postsImg.imgSize})
+		</foreach>
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

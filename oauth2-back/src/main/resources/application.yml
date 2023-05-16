@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/book_management
@@ -49,3 +53,7 @@ mybatis:
 
 jwt:
   secret: ezV2FMXHX7bzV8eEL9lHf0MLSCnB5M6gtjcHmokIxABqjplbHtRypoN8H2vMTxVO
+  
+file:
+  path: C:/junil/aws_20221228_junil/workspace/oauth2/oauth2-back/upload/
+  
