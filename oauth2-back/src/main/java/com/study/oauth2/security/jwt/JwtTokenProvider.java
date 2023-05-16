@@ -1,18 +1,26 @@
 package com.study.oauth2.security.jwt;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.study.oauth2.entity.User;
+import com.study.oauth2.repository.UserRepository;
 import com.study.oauth2.security.PrincipalUser;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -21,6 +29,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
 	
+	@Autowired
+	private UserRepository userRepository;
 	private final Key key;
 	
 	public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
@@ -76,6 +86,35 @@ public class JwtTokenProvider {
 				.signWith(key, SignatureAlgorithm.HS256)
 				.compact();
 		
+	}
+	
+	public Authentication getAuthentication(String accessToken) {
+		
+		Authentication authentication = null;
+		
+		Claims claims = Jwts.parserBuilder()
+							.setSigningKey(key)
+							.build()
+							.parseClaimsJws(accessToken)
+							.getBody();
+		
+//		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//		
+//		// auth -> "ROLE_USER,ROLE_ADMIN"
+//		String[] roles = claims.get("auth").toString().split(",");
+//		
+//		for(String role : roles) {
+//			authorities.add(new SimpleGrantedAuthority(role));
+//		}
+		
+		String email = claims.get("email").toString();
+		User userEntity = userRepository.findUserByEmail(email);
+		
+		PrincipalUser principalUser = userEntity.toPrincipal();
+		
+		authentication = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
+		
+		return authentication;
 	}
 	
 	public Boolean validateToken(String token) {
