@@ -54,6 +54,7 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
 		User userEntity = oAuth2RegisterReqDto.toEntity();
 		
 		userRepository.saveUser(userEntity);
+		
 		return userRepository.saveAuthority(
 				Authority.builder()
 					.userId(userEntity.getUserId())

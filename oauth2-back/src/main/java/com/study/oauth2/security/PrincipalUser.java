@@ -20,6 +20,7 @@ public class PrincipalUser implements UserDetails {
 	private String email;
 	private String password;
 	private List<Authority> authorities;
+	private String profileImg;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

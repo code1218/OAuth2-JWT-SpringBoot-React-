@@ -10,6 +10,7 @@
 		<result property="password" column="password" />
 		<result property="name" column="name" />
 		<result property="provider" column="provider" />
+		<result property="profileImg" column="profile_img" />
 		<collection property="authorities" javaType="list" resultMap="authorityMap" />
 	</resultMap>
 	
@@ -32,6 +33,7 @@
 			ut.password,
 			ut.name,
 			ut.provider,
+			ut.profile_img,
 			
 			at.authority_id,
 			at.user_id,
@@ -52,7 +54,7 @@
 	useGeneratedKeys="true"
 	keyProperty="userId">
 		insert into user_tb
-		values (0, #{email}, #{password}, #{name}, #{provider})
+		values (0, #{email}, #{password}, #{name}, #{provider}, "default.jpg")
 	</insert>
 	
 	<insert id="saveAuthority" parameterType="com.study.oauth2.entity.Authority">
@@ -67,7 +69,28 @@
 		where
 			user_id = #{userId}
 	</update>
+	
+	<update id="updateProfileImg" parameterType="com.study.oauth2.entity.User">
+		update user_tb
+		set
+			profile_img = #{profileImg}
+		where
+			user_id = #{userId}
+	</update>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

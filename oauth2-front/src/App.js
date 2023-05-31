@@ -1,9 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AuthRoute from './components/auth/AuthRoute';
+import ForgotPassword from './pages/Forgot/ForgotPassword';
 import Index from './pages/Index/Index';
 import Login from './pages/Login/Login';
 import OAuth2Login from './pages/Login/OAuth2Login';
+import Profile from './pages/Mypage/Profile';
 import NotFound from './pages/NotFound/NotFound';
 import OAuth2Merge from './pages/OAuth2Merge/OAuth2Merge';
 import PostRegister from './pages/Posts/PostRegister';
@@ -13,9 +15,10 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path='/auth/forgot/password' element={<AuthRoute path={"/auth/forgot/password"} element={<ForgotPassword />} />}/>
         <Route path='/' element={<AuthRoute path={"/"} element={<Index />} />}/>
         
-        <Route path='/mypage' element={<AuthRoute path={"/mypage"} element={<Index />} />}/>
+        <Route path='/mypage/profile' element={<AuthRoute path={"/mypage/profile"} element={<Profile />} />}/>
         <Route path='/post/register' element={<AuthRoute path={"/post/register"} element={<PostRegister />} />}/>
 
 
