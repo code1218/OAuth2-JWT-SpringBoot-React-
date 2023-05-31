@@ -36,17 +36,6 @@ const Profile = () => {
   const [profileImgURL, setProfileImgURL] = useState();
   const fileRef = useRef();
 
-  useEffect(() => {
-    const iamport = document.createElement("script");
-    iamport.src = "https://cdn.iamport.kr/v1/iamport.js";
-
-    const head = document.head;
-    head.appendChild(iamport);
-    return () => {
-      head.removeChild(iamport);
-    };
-  }, []);
-
   const principal = useQuery(["principal"], async () => {
     const option = {
       headers: {
@@ -104,35 +93,6 @@ const Profile = () => {
     fileReader.readAsDataURL(e.target.files[0]);
     e.target.value = null;
   };
-z
-  const onClickPayment = () => {
-    if (!window.IMP) return;
-    const { IMP } = window;
-    IMP.init("imp14519436");
-
-    const data = {
-      pg: "kakao", // PG사 : https://portone.gitbook.io/docs/sdk/javascript-sdk/payrq#undefined-1 참고
-      pay_method: "kakaopay", // 결제수단
-      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-      amount: 1000, // 결제금액
-      name: "아임포트 결제 데이터 분석", // 주문명
-      buyer_name: "홍길동", // 구매자 이름
-      buyer_tel: "01012341234", // 구매자 전화번호
-      buyer_email: "example@example", // 구매자 이메일
-      buyer_addr: "신사동 661-16", // 구매자 주소
-      buyer_postcode: "06018", // 구매자 우편번호
-    };
-
-    IMP.request_pay(data, (response) => {
-      const { success, error_msg } = response;
-
-      if (success) {
-        alert("결제 성공");
-      } else {
-        alert(`결제 실패: ${error_msg}`);
-      }
-    });
-  };
 
   return (
     <div css={container}>
@@ -146,7 +106,6 @@ z
         />
       </div>
       <button onClick={() => profileImgSubmit.mutate()}>이미지 저장</button>
-      <button onClick={onClickPayment}>결제하기</button>
     </div>
   );
 };
